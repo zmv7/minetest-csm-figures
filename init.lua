@@ -98,7 +98,6 @@ end})
 
 core.register_chatcommand("sphereconf",{
   description = "Configure sphere assistant",
-  params = "<radius>",
   func = function(param)
 	core.show_formspec("sphereconf",
 		"size[3,3.2]" ..
