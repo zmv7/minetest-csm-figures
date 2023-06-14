@@ -1,4 +1,6 @@
-local pss = {}
+local pdraw_distance = 15
+
+local poses = {}
 local cwp
 
 function hs(center,radius,dome)
@@ -13,26 +15,7 @@ function hs(center,radius,dome)
 				local node = core.get_node_or_nil(pos)
 				if distance >= radius - 1 and distance <= radius and (not node or node.name == "air") then
 					if not dome or pos.y >= center.y then
-						local ps = core.add_particlespawner({
-							amount = 1,
-							time = 0,
-							glow = 14,
-							minpos = pos,
-							maxpos = pos,
-							minvel = {x=0, y=0, z=0},
-							maxvel = {x=0, y=0, z=0},
-							minacc = {x=0, y=0, z=0},
-							maxacc = {x=0, y=0, z=0},
-							minexptime = 1,
-							maxexptime = 1,
-							minsize = 10,
-							maxsize = 10,
-							collisiondetection = false,
-							collision_removal = false,
-							vertical = false,
-							texture = "cdb_add.png",
-						})
-						table.insert(pss,ps)
+						table.insert(poses,pos)
 					end
 				end
 			end
@@ -40,13 +23,34 @@ function hs(center,radius,dome)
 	end
 end
 
+core.register_globalstep(function(dtime)
+	if #poses > 0 then
+		local ppos = core.localplayer:get_pos()
+		for _,pos in ipairs(poses) do
+			local distance = vector.distance(ppos, pos)
+			if distance < pdraw_distance then
+				core.add_particle({
+					pos = pos,
+					velocity = {x=0, y=0, z=0},
+					acceleration = {x=0, y=0, z=0},
+					expirationtime = dtime,
+					size = 10,
+					collisiondetection = false,
+					collision_removal = false,
+					vertical = false,
+					texture = "cdb_add.png",
+					glow = 14
+				})
+			end
+		end
+	end
+end)
+
 core.register_chatcommand("sphere",{
   description = "Create hollow sphere of particles",
   params = "<radius>",
   func = function(param)
-	for _,ps in ipairs(pss) do
-		core.delete_particlespawner(ps)
-	end
+	poses = {}
 	if cwp then
 		core.localplayer:hud_remove(cwp)
 		cwp = nil
@@ -69,9 +73,7 @@ core.register_chatcommand("dome",{
   description = "Create hollow dome of particles",
   params = "<radius>",
   func = function(param)
-	for _,ps in ipairs(pss) do
-		core.delete_particlespawner(ps)
-	end
+	poses = {}
 	if cwp then
 		core.localplayer:hud_remove(cwp)
 		cwp = nil
