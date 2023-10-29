@@ -96,7 +96,7 @@ core.register_chatcommand("ring",{
 			number = 0xFF0000,
 			world_pos = pos
 		})
-		return true, "Ring created"
+		return true, "Ring r="..tostring(radius).." created, "..#poses.." positions allocated"
 	else
 		return false, "Ring disabled"
 	end
