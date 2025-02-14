@@ -55,11 +55,11 @@ core.register_globalstep(function(dtime)
 						velocity = {x=0, y=0, z=0},
 						acceleration = {x=0, y=0, z=0},
 						expirationtime = dtime,
-						size = 10,
+						size = 5,
 						collisiondetection = false,
 						collision_removal = false,
 						vertical = false,
-						texture = "cdb_add.png",
+						texture = "[png:iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAIklEQVQIW2NkAAL7Q9L/D9o9ZWQEMf7eY2NgVvrFwIgsAwD1fw0fS8jqfAAAAABJRU5ErkJgggAA",
 						glow = 14
 					})
 				end
